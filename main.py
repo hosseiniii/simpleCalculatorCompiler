@@ -1,63 +1,106 @@
-""" Simple Calculator """
+"""
+ Simple Calculator
 
-# Constants
-OPERATORS = ['=', '+', '-', '/', '*']
+    Seyyed Sadegh Hosseini
+    9621160009
+
+"""
+
+tokens = []
+variable_name = ""
+number = ""
+
+
+class Type:
+    ID = 1
+    EQUAL = 2
+    NUMBER = 3
+    REAL = 4
+    LPAR = 5
+    RPAR = 6
+    PLUS = 7
+    MINUS = 8
+    MUL = 9
+    DIVIDE = 10
 
 
 def get_inputs(inp):
 
     index = 0
-    begin = index
     state = 0
 
     while index < len(inp):
+        global variable_name
+        global number
+
         print("State:", state)
 
         if state == 0:
-            if inp[index].isdigit() or inp[index] in ['-', '+']:
-                begin = index
+            if inp[index].isalpha() or inp[index] == '_':
                 state = 10
 
-            elif inp[index].isalpha() or inp[index] == '_':
-                begin = index
+            elif inp[index].isdigit():
                 state = 20
 
             elif inp[index] == '(':
-                begin = index
                 state = 30
 
-            else:
-                index -= 1
-                state = 100
+            elif inp[index] == ')':
+                state = 40
 
         elif state == 10:
-            if inp[index].isdigit():
-                pass
-            elif inp[index] == '=':
-                state = 50
-            elif inp[index] == '+':
-                state = 60
-            elif inp[index] == '-':
-                state = 70
-            elif inp[index] == '*':
-                state = 80
-            elif inp[index] == '/':
-                state = 90
+            if inp[index].isalpha():
+                state = 10
+                variable_name += inp[index]
+                index += 1
 
-        elif state == 11:
-            pass
+            elif inp[index].isdigit():
+                state = 10
+                variable_name += inp[index]
+                index += 1
+
+            elif inp[index] == '_':
+                state = 10
+                variable_name += inp[index]
+                index += 1
+
+            else:
+                tokens.append([Type.ID, variable_name])
+                state = 0
+                variable_name = ""
+
+        elif state == 20:
+            if inp[index].isdigit():
+                state = 20
+                number += inp[index]
+                index += 1
+
+            elif inp[index] == '.':
+                state = 21
+                number += inp[index]
+                index += 1
+
+            else:
+                tokens.append([Type.NUMBER, number])
+                state = 0
+                number = ""
+
+        elif state == 21:
+            if inp[index].isdigit():
+                state = 22
+                number += inp[index]
+                index += 1
+
+            else:
+                tokens.append([Type.REAL, number])
+                state = 0
+                number = ""
 
         elif state == 12:
             pass
 
         elif state == 13:
             pass
-
-        elif state == 100:
-            print("Wrong Input!")
-            break
-
-        index += 1
 
 
 def remove_spaces(inp):
