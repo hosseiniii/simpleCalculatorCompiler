@@ -48,6 +48,18 @@ def get_inputs(inp):
             elif inp[index] == ')':
                 state = 40
 
+            elif inp[index] == '=':
+                state = 50
+
+            elif inp[index] == '*':
+                state = 60
+
+            elif inp[index] == '/':
+                state = 70
+
+            elif inp[index] == '#':
+                state = 80
+
         elif state == 10:
             if inp[index].isalpha():
                 state = 10
@@ -96,11 +108,35 @@ def get_inputs(inp):
                 state = 0
                 number = ""
 
-        elif state == 12:
-            pass
+        elif state == 30:
+            tokens.append([Type.RPAR, number])
+            state = 0
+            index += 1
 
-        elif state == 13:
-            pass
+        elif state == 40:
+            tokens.append([Type.LPAR, number])
+            state = 0
+            index += 1
+
+        elif state == 50:
+            tokens.append([Type.EQUAL, number])
+            state = 0
+            index += 1
+
+        elif state == 60:
+            tokens.append([Type.MUL, number])
+            state = 0
+            index += 1
+
+        elif state == 70:
+            tokens.append([Type.DIVIDE, number])
+            state = 0
+            index += 1
+
+        elif state == 80:
+            for t in tokens:
+                print(t[0], t[1])
+            index = len(inp)
 
 
 def remove_spaces(inp):
