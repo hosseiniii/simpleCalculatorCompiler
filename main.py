@@ -33,8 +33,6 @@ def get_inputs(inp):
         global variable_name
         global number
 
-        print("State:", state)
-
         if state == 0:
             if inp[index].isalpha() or inp[index] == '_':
                 state = 10
@@ -57,8 +55,14 @@ def get_inputs(inp):
             elif inp[index] == '/':
                 state = 70
 
-            elif inp[index] == '#':
+            elif inp[index] == '+':
                 state = 80
+
+            elif inp[index] == '-':
+                state = 90
+
+            elif inp[index] == '#':
+                state = 100
 
         elif state == 10:
             if inp[index].isalpha():
@@ -99,7 +103,7 @@ def get_inputs(inp):
 
         elif state == 21:
             if inp[index].isdigit():
-                state = 22
+                state = 21
                 number += inp[index]
                 index += 1
 
@@ -109,34 +113,68 @@ def get_inputs(inp):
                 number = ""
 
         elif state == 30:
-            tokens.append([Type.RPAR, number])
+            tokens.append([Type.LPAR, ""])
             state = 0
             index += 1
 
         elif state == 40:
-            tokens.append([Type.LPAR, number])
+            tokens.append([Type.RPAR, ""])
             state = 0
             index += 1
 
         elif state == 50:
-            tokens.append([Type.EQUAL, number])
+            tokens.append([Type.EQUAL, ""])
             state = 0
             index += 1
 
         elif state == 60:
-            tokens.append([Type.MUL, number])
+            tokens.append([Type.MUL, ""])
             state = 0
             index += 1
 
         elif state == 70:
-            tokens.append([Type.DIVIDE, number])
+            tokens.append([Type.DIVIDE, ""])
             state = 0
             index += 1
 
         elif state == 80:
+            tokens.append([Type.PLUS, ""])
+            state = 0
+            index += 1
+
+        elif state == 90:
+            tokens.append([Type.MINUS, ""])
+            state = 0
+            index += 1
+
+        elif state == 100:
             for t in tokens:
-                print(t[0], t[1])
+                typ = t[0]
+                type_str = ""
+                if typ == 1:
+                    type_str = "ID"
+                elif typ == 2:
+                    type_str = "EQUAL"
+                elif typ == 3:
+                    type_str = "NUMBER"
+                elif typ == 4:
+                    type_str = "REAL"
+                elif typ == 5:
+                    type_str = "LPAR"
+                elif typ == 6:
+                    type_str = "RPAR"
+                elif typ == 7:
+                    type_str = "PLUS"
+                elif typ == 8:
+                    type_str = "MINUS"
+                elif typ == 9:
+                    type_str = "MUL"
+                elif typ == 10:
+                    type_str = "DIVIDE"
+
+                print("(" + str(type_str), ", ", str(t[1])+ ")", end=" ")
             index = len(inp)
+            print()
 
 
 def remove_spaces(inp):
