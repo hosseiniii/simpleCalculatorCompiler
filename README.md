@@ -1,7 +1,7 @@
 ## Calculator Lexical Analuzer
 ### Seyyed Sadegh Hosseini
 
-In each line enter your command then Enter ```#```
+In each line enter your command then Enter ```#```.
 
 #### For Example:
 ```
